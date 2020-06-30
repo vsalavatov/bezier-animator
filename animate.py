@@ -15,17 +15,17 @@ curves = BezierCurves(sys.argv[1])
 
 pygame.init()
 
-skip_animation = True
+skip_animation = False
 
 WIDTH = 1080
 HEIGHT = 720
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-TRANSPARENT = (255, 255, 255, 37)
+TRANSPARENT = (255, 255, 255, 6)
 
-animation_time = 0.4
-fps = 300
+animation_time = 0.5
+fps = 240
 spf = 1.0 / fps
 
 display = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -42,26 +42,29 @@ def gen_frame_filename(index):
     return frame_folder + str(index) + '.png'
 
 imgs = []
-for index in range(total_frames):
-    t_start = time.time()
-    # display.fill(WHITE)
-    surface.fill(TRANSPARENT)
+for _ in range(2):
+    imgs = []
+    for index in range(total_frames):
+        t_start = time.time()
+        # display.fill(WHITE)
+        surface.fill(TRANSPARENT)
 
-    t = index / total_frames
+        t = index / total_frames
 
-    curves.draw(surface, t, True, False, False)
+        curves.draw(surface, t, True, True, True)
 
-    display.blit(surface, (0, 0))
-    pygame.display.update()
-    filename = gen_frame_filename(index)
-    imgs.append(filename)
-    pygame.image.save(display, filename)
+        display.blit(surface, (0, 0))
+        if not skip_animation: pygame.display.update()
+        filename = gen_frame_filename(index)
+        imgs.append(filename)
+        pygame.image.save(display, filename)
 
-    t_end = time.time()
-    t_sleep = spf - (t_end - t_start)
-    if not skip_animation and t_sleep > 0:
-        time.sleep(t_sleep)
+        t_end = time.time()
+        t_sleep = spf - (t_end - t_start)
+        if not skip_animation and t_sleep > 0:
+            time.sleep(t_sleep)
 
+pygame.display.update()
 print('making gif...')
 
 from PIL import Image

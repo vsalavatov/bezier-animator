@@ -23,12 +23,12 @@ class Bezier(object):
 
 class BezierCurves(object):
     def __init__(self, filename = None):
-        self.pivots_color = (0, 0, 0, 255)
-        self.pivots_radius = 5
-        self.lines_color = (0, 0, 0, 255)
+        self.pivots_color = (170, 170, 170, 2)
+        self.pivots_radius = 1
+        self.lines_color = (250, 250, 250, 1)
         self.lines_thickness = 1
-        self.point_color = (0, 0, 0, 255)
-        self.point_radius = 7
+        self.point_color = (10, 13, 255, 255)
+        self.point_radius = 5
 
         self.curves = []
         if filename:
@@ -70,7 +70,10 @@ class BezierCurves(object):
             if draw_pivots:
                 for c in self.curves:
                     for p in c.pivots:
-                        pygame.draw.circle(surface, self.pivots_color, p, self.pivots_radius)
+                        if c.is_final():
+                            pygame.draw.circle(surface, self.point_color, p, self.point_radius)
+                        else:
+                            pygame.draw.circle(surface, self.pivots_color, p, self.pivots_radius)
         if not self.is_final():
             bc = self.reduce(t)
             bc.draw(surface, t, draw_pivots, draw_lines, draw_evolution)
